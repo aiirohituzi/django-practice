@@ -5,6 +5,9 @@ from django.shortcuts import get_object_or_404
 from .forms import PhotoForm
 from django.shortcuts import redirect
 
+# from django.conf import settings
+from django.contrib.auth.decorators import login_required
+
 def hello(request):
     return HttpResponse('안녕하세요!')
 
@@ -18,15 +21,23 @@ def detail(request, pk):
     )
     return HttpResponse('\n'.join(messages))
 
+@login_required
 def create(request):
+    # if not request.user.is_authenticated():
+    #     return redirect(settings.LOGIN_URL)
+
     if request.method == "GET":
         form = PhotoForm()
     elif request.method == "POST":
         form = PhotoForm(request.POST, request.FILES)
 
         if form.is_valid():
-            obj = form.save()
+            obj = form.save(commit=False)      # true일 경우 바로 데이터베이스에 적용, 현재 유저정보가 담기지 않았기에 not null 제약조건에 걸려 작업이 실패하므로 false
+            obj.user = request.user
+            obj.save()      # obj.save(commit=True) 와 동일
+
             return redirect(obj)
+
 
     ctx = {
         'form': form,

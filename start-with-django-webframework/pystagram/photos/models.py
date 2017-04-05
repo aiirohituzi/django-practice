@@ -1,7 +1,9 @@
 from django.db import models
 from django.core.urlresolvers import reverse_lazy
+from django.conf import settings
 
 class Photo(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)    
     # id = '개별 사진을 구분하는 색인값'
     image = models.ImageField(upload_to='%Y/%m/%d/orig')                # '원본 사진 파일'
     filtered_image = models.ImageField(upload_to='%Y/%m/%d/filtered')   #'필터 적용된 사진 파일'
