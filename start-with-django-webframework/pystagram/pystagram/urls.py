@@ -24,6 +24,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 
+from django.conf.urls import include
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^hello/$', hello),
@@ -45,6 +47,7 @@ urlpatterns = [
             'next_page': settings.LOGIN_URL,
         }
     ),
+    url(r'^users/', include('profiles.urls')),
 ]
 
 urlpatterns += static('upload_files', document_root=settings.MEDIA_ROOT)

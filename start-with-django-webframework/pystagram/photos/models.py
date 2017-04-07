@@ -12,6 +12,9 @@ class Photo(models.Model):
 
     # blank=True : 빈칸을 허용하겠다는 옵션
     # null=True : None 자료형을 허용
+
+    class Meta:
+        ordering = ('-created_at', '-pk', )
     
     def delete(self, *args, **kwargs):
         self.image.delete()
